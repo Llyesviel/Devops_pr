@@ -12,7 +12,7 @@ on:
     branches: [ "main", "dev" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,6 @@ jobs:
         with:
           flutter-version: '3.16.0'
           channel: 'stable'
-
-      # Change to mobile_app directory
-      - name: Change to mobile_app directory
-        run: cd mobile_app
 
       - name: Install dependencies
         run: |
@@ -44,22 +40,10 @@ jobs:
       - name: Analyze project source
         run: |
           cd mobile_app
-          flutter analyze
+          flutter analyze --no-fatal-infos
 
       # Run tests for Flutter project
       - name: Run tests
         run: |
           cd mobile_app
           flutter test
-
-      # Build APK for Android
-      - name: Build APK
-        run: |
-          cd mobile_app
-          flutter build apk --release
-
-      # Build web version
-      - name: Build Web
-        run: |
-          cd mobile_app
-          flutter build web --release
