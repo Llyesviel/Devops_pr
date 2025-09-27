@@ -28,7 +28,18 @@
         "build_runner",
         "flutter_lints",
         "flutter_test",
-        "hive_generator"
+        "hive_generator",
+        "pubspec_dependency_sorter"
+      ]
+    },
+    {
+      "name": "pubspec_dependency_sorter",
+      "version": "1.0.5",
+      "dependencies": [
+        "flutter",
+        "logger",
+        "pubspec",
+        "yaml_writer"
       ]
     },
     {
@@ -240,6 +251,18 @@
       ]
     },
     {
+      "name": "flutter",
+      "version": "0.0.0",
+      "dependencies": [
+        "characters",
+        "collection",
+        "material_color_utilities",
+        "meta",
+        "sky_engine",
+        "vector_math"
+      ]
+    },
+    {
       "name": "dio",
       "version": "5.9.0",
       "dependencies": [
@@ -269,15 +292,25 @@
       ]
     },
     {
-      "name": "flutter",
-      "version": "0.0.0",
+      "name": "yaml_writer",
+      "version": "2.1.0",
+      "dependencies": []
+    },
+    {
+      "name": "pubspec",
+      "version": "2.3.0",
       "dependencies": [
-        "characters",
-        "collection",
-        "material_color_utilities",
-        "meta",
-        "sky_engine",
-        "vector_math"
+        "path",
+        "pub_semver",
+        "uri",
+        "yaml"
+      ]
+    },
+    {
+      "name": "logger",
+      "version": "2.6.1",
+      "dependencies": [
+        "meta"
       ]
     },
     {
@@ -981,6 +1014,23 @@
       ]
     },
     {
+      "name": "sky_engine",
+      "version": "0.0.0",
+      "dependencies": []
+    },
+    {
+      "name": "material_color_utilities",
+      "version": "0.11.1",
+      "dependencies": [
+        "collection"
+      ]
+    },
+    {
+      "name": "characters",
+      "version": "1.4.0",
+      "dependencies": []
+    },
+    {
       "name": "dio_web_adapter",
       "version": "2.1.1",
       "dependencies": [
@@ -1032,21 +1082,12 @@
       ]
     },
     {
-      "name": "sky_engine",
-      "version": "0.0.0",
-      "dependencies": []
-    },
-    {
-      "name": "material_color_utilities",
-      "version": "0.11.1",
+      "name": "uri",
+      "version": "1.0.0",
       "dependencies": [
-        "collection"
+        "matcher",
+        "quiver"
       ]
-    },
-    {
-      "name": "characters",
-      "version": "1.4.0",
-      "dependencies": []
     },
     {
       "name": "source_span",
@@ -1392,6 +1433,13 @@
         "sqflite_common",
         "sqflite_darwin",
         "sqflite_platform_interface"
+      ]
+    },
+    {
+      "name": "quiver",
+      "version": "3.2.2",
+      "dependencies": [
+        "matcher"
       ]
     },
     {
