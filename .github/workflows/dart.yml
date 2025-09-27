@@ -3,13 +3,13 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: Flutter CI
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main", "dev" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   build:
@@ -18,24 +18,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      - uses: dart-lang/setup-dart@v1
+      # Setup Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+
+      # Change to mobile_app directory
+      - name: Change to mobile_app directory
+        run: cd mobile_app
 
       - name: Install dependencies
-        run: dart pub get
+        run: |
+          cd mobile_app
+          flutter pub get
 
       # Verify formatting - раскомментировано для проверки форматирования кода
       - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: |
+          cd mobile_app
+          dart format --output=none --set-exit-if-changed .
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
-        run: dart analyze
+        run: |
+          cd mobile_app
+          flutter analyze
 
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
+      # Run tests for Flutter project
       - name: Run tests
-        run: dart test
+        run: |
+          cd mobile_app
+          flutter test
+
+      # Build APK for Android
+      - name: Build APK
+        run: |
+          cd mobile_app
+          flutter build apk --release
+
+      # Build web version
+      - name: Build Web
+        run: |
+          cd mobile_app
+          flutter build web --release
