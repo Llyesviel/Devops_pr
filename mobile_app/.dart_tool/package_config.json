@@ -944,10 +944,10 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "mobile_app",
+      "name": "animal_charity_app",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.0"
     }
   ],
   "generator": "pub",

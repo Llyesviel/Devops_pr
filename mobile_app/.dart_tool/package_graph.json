@@ -1,10 +1,10 @@
 {
   "roots": [
-    "mobile_app"
+    "animal_charity_app"
   ],
   "packages": [
     {
-      "name": "mobile_app",
+      "name": "animal_charity_app",
       "version": "1.0.0+1",
       "dependencies": [
         "cached_network_image",
