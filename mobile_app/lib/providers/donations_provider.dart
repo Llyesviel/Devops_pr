@@ -143,7 +143,7 @@ class DonationsProvider with ChangeNotifier {
           .eq('status', 'completed');
 
       final donations = response;
-      final total = donations.fold(
+      final total = donations.fold<double>(
         0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
@@ -158,7 +158,7 @@ class DonationsProvider with ChangeNotifier {
           .gte('created_at', startOfMonth.toIso8601String());
 
       final monthlyDonations = monthlyResponse;
-      final monthlyTotal = monthlyDonations.fold(
+      final monthlyTotal = monthlyDonations.fold<double>(
         0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
