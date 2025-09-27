@@ -40,13 +40,13 @@ class DonationsProvider with ChangeNotifier {
       final response = await query.order('created_at', ascending: false);
       
       _donations = response
-          .map((json) => Donation.fromJson(json as Map<String, dynamic>))
+          .map(Donation.fromJson)
           .toList();
 
       // Calculate total donated
       _totalDonated = _donations
           .where((d) => d.status == 'completed')
-          .fold(0.0, (sum, donation) => sum + donation.amount);
+          .fold(0, (sum, donation) => sum + donation.amount);
 
     } on PostgrestException catch (e) {
       _error = e.message;
@@ -68,7 +68,9 @@ class DonationsProvider with ChangeNotifier {
   }) async {
     try {
       final user = _supabase.auth.currentUser;
-      if (user == null) return false;
+      if (user == null) {
+        return false;
+      }
 
       _isLoading = true;
       notifyListeners();
@@ -140,14 +142,14 @@ class DonationsProvider with ChangeNotifier {
           .select('amount, status')
           .eq('status', 'completed');
 
-      final donations = response as List<dynamic>;
-      final total = donations.fold<double>(
+      final donations = response;
+      final total = donations.fold(
         0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
 
       final thisMonth = DateTime.now();
-      final startOfMonth = DateTime(thisMonth.year, thisMonth.month, 1);
+      final startOfMonth = DateTime(thisMonth.year, thisMonth.month);
       
       final monthlyResponse = await _supabase
           .from('donations')
@@ -155,8 +157,8 @@ class DonationsProvider with ChangeNotifier {
           .eq('status', 'completed')
           .gte('created_at', startOfMonth.toIso8601String());
 
-      final monthlyDonations = monthlyResponse as List<dynamic>;
-      final monthlyTotal = monthlyDonations.fold<double>(
+      final monthlyDonations = monthlyResponse;
+      final monthlyTotal = monthlyDonations.fold(
         0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
@@ -166,7 +168,10 @@ class DonationsProvider with ChangeNotifier {
         'monthly': monthlyTotal,
         'count': donations.length.toDouble(),
       };
-    } catch (e) {
+    } on PostgrestException catch (e) {
+      debugPrint('Error getting donation stats: ${e.message}');
+      return {'total': 0.0, 'monthly': 0.0, 'count': 0.0};
+    } on Exception catch (e) {
       debugPrint('Error getting donation stats: $e');
       return {'total': 0.0, 'monthly': 0.0, 'count': 0.0};
     }

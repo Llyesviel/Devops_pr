@@ -72,15 +72,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) => Transform.scale(
             scale: _scaleAnimation.value,
-child: FadeTransition(
+            child: FadeTransition(
               opacity: _fadeAnimation,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -135,5 +134,4 @@ child: FadeTransition(
         ),
       ),
     );
-  }
 }

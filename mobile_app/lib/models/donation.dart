@@ -31,37 +31,6 @@ class Donation {
     this.shelterName,
   });
 
-  Donation.copyWith({
-    String? id,
-    String? userId,
-    String? shelterId,
-    double? amount,
-    String? message,
-    bool? isAnonymous,
-    String? status,
-    String? paymentMethod,
-    String? paymentIntentId,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    String? userName,
-    String? userEmail,
-    String? shelterName,
-    required Donation original,
-  }) : id = id ?? original.id,
-       userId = userId ?? original.userId,
-       shelterId = shelterId ?? original.shelterId,
-       amount = amount ?? original.amount,
-       message = message ?? original.message,
-       isAnonymous = isAnonymous ?? original.isAnonymous,
-       status = status ?? original.status,
-       paymentMethod = paymentMethod ?? original.paymentMethod,
-       paymentIntentId = paymentIntentId ?? original.paymentIntentId,
-       createdAt = createdAt ?? original.createdAt,
-       updatedAt = updatedAt ?? original.updatedAt,
-       userName = userName ?? original.userName,
-       userEmail = userEmail ?? original.userEmail,
-       shelterName = shelterName ?? original.shelterName;
-
   factory Donation.fromJson(Map<String, dynamic> json) => Donation(
       id: json['id'] as String,
       userId: json['user_id'] as String,
@@ -81,20 +50,6 @@ class Donation {
       shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] 
           as String?,
     );
-
-  Map<String, dynamic> toJson() => {
-      'id': id,
-      'user_id': userId,
-      'shelter_id': shelterId,
-      'amount': amount,
-      'message': message,
-      'is_anonymous': isAnonymous,
-      'status': status,
-      'payment_method': paymentMethod,
-      'payment_intent_id': paymentIntentId,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-    };
 
   Donation copyWith({
     String? id,
@@ -127,6 +82,20 @@ class Donation {
       userEmail: userEmail ?? this.userEmail,
       shelterName: shelterName ?? this.shelterName,
     );
+
+  Map<String, dynamic> toJson() => {
+      'id': id,
+      'user_id': userId,
+      'shelter_id': shelterId,
+      'amount': amount,
+      'message': message,
+      'is_anonymous': isAnonymous,
+      'status': status,
+      'payment_method': paymentMethod,
+      'payment_intent_id': paymentIntentId,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+    };
 
   bool get isPending => status == 'pending';
   bool get isCompleted => status == 'completed';

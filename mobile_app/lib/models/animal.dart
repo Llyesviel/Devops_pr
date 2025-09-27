@@ -43,49 +43,6 @@ class Animal {
     this.weight,
   });
 
-  Animal.copyWith({
-    String? id,
-    String? name,
-    String? species,
-    String? breed,
-    int? age,
-    String? gender,
-    String? description,
-    List<String>? imageUrls,
-    String? shelterId,
-    String? shelterName,
-    String? shelterAddress,
-    bool? isAdopted,
-    bool? isFavorite,
-    DateTime? createdAt,
-    DateTime? updatedAt,
-    String? medicalHistory,
-    String? temperament,
-    bool? isVaccinated,
-    bool? isNeutered,
-    double? weight,
-    required Animal original,
-  }) : id = id ?? original.id,
-       name = name ?? original.name,
-       species = species ?? original.species,
-       breed = breed ?? original.breed,
-       age = age ?? original.age,
-       gender = gender ?? original.gender,
-       description = description ?? original.description,
-       imageUrls = imageUrls ?? original.imageUrls,
-       shelterId = shelterId ?? original.shelterId,
-       shelterName = shelterName ?? original.shelterName,
-       shelterAddress = shelterAddress ?? original.shelterAddress,
-       isAdopted = isAdopted ?? original.isAdopted,
-       isFavorite = isFavorite ?? original.isFavorite,
-       createdAt = createdAt ?? original.createdAt,
-       updatedAt = updatedAt ?? original.updatedAt,
-       medicalHistory = medicalHistory ?? original.medicalHistory,
-       temperament = temperament ?? original.temperament,
-       isVaccinated = isVaccinated ?? original.isVaccinated,
-       isNeutered = isNeutered ?? original.isNeutered,
-       weight = weight ?? original.weight;
-
   factory Animal.fromJson(Map<String, dynamic> json) => Animal(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -110,27 +67,6 @@ class Animal {
       temperament: json['temperament'] as String?,
       weight: (json['weight'] as num?)?.toDouble(),
     );
-
-  Map<String, dynamic> toJson() => {
-      'id': id,
-      'name': name,
-      'species': species,
-      'breed': breed,
-      'age': age,
-      'gender': gender,
-      'description': description,
-      'image_urls': imageUrls,
-      'shelter_id': shelterId,
-      'is_adopted': isAdopted,
-      'is_favorite': isFavorite,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'medical_history': medicalHistory,
-      'temperament': temperament,
-      'is_vaccinated': isVaccinated,
-      'is_neutered': isNeutered,
-      'weight': weight,
-    };
 
   Animal copyWith({
     String? id,
@@ -175,6 +111,27 @@ class Animal {
       isNeutered: isNeutered ?? this.isNeutered,
       weight: weight ?? this.weight,
     );
+
+  Map<String, dynamic> toJson() => {
+      'id': id,
+      'name': name,
+      'species': species,
+      'breed': breed,
+      'age': age,
+      'gender': gender,
+      'description': description,
+      'image_urls': imageUrls,
+      'shelter_id': shelterId,
+      'is_adopted': isAdopted,
+      'is_favorite': isFavorite,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'medical_history': medicalHistory,
+      'temperament': temperament,
+      'is_vaccinated': isVaccinated,
+      'is_neutered': isNeutered,
+      'weight': weight,
+    };
 
   @override
   bool operator ==(Object other) =>

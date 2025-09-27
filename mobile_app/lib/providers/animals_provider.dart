@@ -48,7 +48,7 @@ class AnimalsProvider with ChangeNotifier {
       final response = await query.order('created_at', ascending: false);
       
       _animals = response
-          .map((json) => Animal.fromJson(json as Map<String, dynamic>))
+          .map(Animal.fromJson)
           .toList();
     } on PostgrestException catch (e) {
       _error = e.message;
@@ -65,7 +65,9 @@ class AnimalsProvider with ChangeNotifier {
   Future<bool> toggleFavorite(String animalId) async {
     try {
       final user = _supabase.auth.currentUser;
-      if (user == null) return false;
+      if (user == null) {
+        return false;
+      }
 
       // Check if already favorited
       final existing = await _supabase

@@ -27,8 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: const Text('Animal Charity'),
         backgroundColor: Theme.of(context).primaryColor,
@@ -47,9 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   context, 
                   listen: false,
                 );
+                final navigator = Navigator.of(context);
                 await authProvider.signOut();
                 if (mounted) {
-                  await Navigator.of(context).pushReplacementNamed('/login');
+                  await navigator.pushReplacementNamed('/login');
                 }
               }
             },
@@ -132,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
 }
 
 class _HomeTab extends StatelessWidget {
