@@ -36,15 +36,14 @@ class Animal {
     required this.isFavorite,
     required this.createdAt,
     required this.updatedAt,
-    this.medicalHistory,
-    this.temperament,
     required this.isVaccinated,
     required this.isNeutered,
+    this.medicalHistory,
+    this.temperament,
     this.weight,
   });
 
-  factory Animal.fromJson(Map<String, dynamic> json) {
-    return Animal(
+  factory Animal.fromJson(Map<String, dynamic> json) => Animal(
       id: json['id'] as String,
       name: json['name'] as String,
       species: json['species'] as String,
@@ -54,22 +53,22 @@ class Animal {
       description: json['description'] as String,
       imageUrls: (json['image_urls'] as List<dynamic>?)?.cast<String>() ?? [],
       shelterId: json['shelter_id'] as String,
-      shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] as String? ?? '',
-      shelterAddress: (json['shelters'] as Map<String, dynamic>?)?['address'] as String? ?? '',
+      shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] 
+          as String? ?? '',
+      shelterAddress: (json['shelters'] as Map<String, dynamic>?)?['address'] 
+          as String? ?? '',
       isAdopted: json['is_adopted'] as bool? ?? false,
       isFavorite: json['is_favorite'] as bool? ?? false,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      medicalHistory: json['medical_history'] as String?,
-      temperament: json['temperament'] as String?,
       isVaccinated: json['is_vaccinated'] as bool? ?? false,
       isNeutered: json['is_neutered'] as bool? ?? false,
+      medicalHistory: json['medical_history'] as String?,
+      temperament: json['temperament'] as String?,
       weight: (json['weight'] as num?)?.toDouble(),
     );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'id': id,
       'name': name,
       'species': species,
@@ -89,7 +88,6 @@ class Animal {
       'is_neutered': isNeutered,
       'weight': weight,
     };
-  }
 
   Animal copyWith({
     String? id,
@@ -138,16 +136,13 @@ class Animal {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Animal && other.id == id;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Animal && other.id == id);
 
   @override
   int get hashCode => id.hashCode;
 
   @override
-  String toString() {
-    return 'Animal(id: $id, name: $name, species: $species, breed: $breed)';
-  }
+  String toString() =>
+      'Animal(id: $id, name: $name, species: $species, breed: $breed)';
 }

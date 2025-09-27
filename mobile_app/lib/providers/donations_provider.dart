@@ -39,7 +39,7 @@ class DonationsProvider with ChangeNotifier {
 
       final response = await query.order('created_at', ascending: false);
       
-      _donations = (response as List)
+      _donations = (response as List<dynamic>)
           .map((json) => Donation.fromJson(json as Map<String, dynamic>))
           .toList();
 
@@ -48,7 +48,7 @@ class DonationsProvider with ChangeNotifier {
           .where((d) => d.status == 'completed')
           .fold(0, (sum, donation) => sum + donation.amount);
 
-    } catch (e) {
+    } on Exception catch (e) {
       _error = e.toString();
       debugPrint('Error fetching donations: $e');
     } finally {
@@ -90,7 +90,7 @@ class DonationsProvider with ChangeNotifier {
       _donations.insert(0, newDonation);
       
       return true;
-    } catch (e) {
+    } on Exception catch (e) {
       _error = e.toString();
       debugPrint('Error creating donation: $e');
       return false;
@@ -116,14 +116,14 @@ class DonationsProvider with ChangeNotifier {
         if (status == 'completed') {
           _totalDonated = _donations
               .where((d) => d.status == 'completed')
-              .fold(0.0, (sum, donation) => sum + donation.amount);
+              .fold(0, (sum, donation) => sum + donation.amount);
         }
         
         notifyListeners();
       }
 
       return true;
-    } catch (e) {
+    } on Exception catch (e) {
       _error = e.toString();
       debugPrint('Error updating donation status: $e');
       return false;
@@ -137,9 +137,9 @@ class DonationsProvider with ChangeNotifier {
           .select('amount, status')
           .eq('status', 'completed');
 
-      final donations = response as List;
+      final donations = response as List<dynamic>;
       final total = donations.fold<double>(
-        0.0,
+        0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
 
@@ -152,9 +152,9 @@ class DonationsProvider with ChangeNotifier {
           .eq('status', 'completed')
           .gte('created_at', startOfMonth.toIso8601String());
 
-      final monthlyDonations = monthlyResponse as List;
+      final monthlyDonations = monthlyResponse as List<dynamic>;
       final monthlyTotal = monthlyDonations.fold<double>(
-        0.0,
+        0,
         (sum, donation) => sum + (donation['amount'] as num).toDouble(),
       );
 

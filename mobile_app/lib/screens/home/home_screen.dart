@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
+
 import '../../providers/animals_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/donations_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // Initialize data loading
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<AnimalsProvider>(context, listen: false).fetchAnimals();
-      Provider.of<DonationsProvider>(context, listen: false).fetchDonations();
+      Provider.of<DonationsProvider>(context, listen: false)
+          .fetchDonations();
     });
   }
 
@@ -41,10 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton<String>(
             onSelected: (value) async {
               if (value == 'logout') {
-                final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                final authProvider = Provider.of<AuthProvider>(
+                  context, 
+                  listen: false,
+                );
                 await authProvider.signOut();
                 if (mounted) {
-                  Navigator.of(context).pushReplacementNamed('/login');
+                  await Navigator.of(context).pushReplacementNamed('/login');
                 }
               }
             },
@@ -134,18 +139,16 @@ class _HomeTab extends StatelessWidget {
   const _HomeTab();
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+  Widget build(BuildContext context) => SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Welcome section
           Consumer<AuthProvider>(
-            builder: (context, authProvider, child) {
-              return Card(
+            builder: (context, authProvider, child) => Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
                       CircleAvatar(
@@ -177,8 +180,7 @@ class _HomeTab extends StatelessWidget {
                     ],
                   ),
                 ),
-              );
-            },
+            ),
           ),
           const SizedBox(height: 24),
           // Quick stats
@@ -191,8 +193,7 @@ class _HomeTab extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Consumer<DonationsProvider>(
-            builder: (context, donationsProvider, child) {
-              return Row(
+            builder: (context, donationsProvider, child) => Row(
                 children: [
                   Expanded(
                     child: _StatCard(
@@ -212,8 +213,7 @@ class _HomeTab extends StatelessWidget {
                     ),
                   ),
                 ],
-              );
-            },
+              ),
           ),
           const SizedBox(height: 24),
           // Recent animals
@@ -234,8 +234,7 @@ class _HomeTab extends StatelessWidget {
               final animals = animalsProvider.animals.take(3).toList();
               
               return Column(
-                children: animals.map((animal) {
-                  return Card(
+                children: animals.map((animal) => Card(
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
                       leading: CircleAvatar(
@@ -252,23 +251,16 @@ class _HomeTab extends StatelessWidget {
                         // Navigate to animal details
                       },
                     ),
-                  );
-                }).toList(),
+                  )).toList(),
               );
             },
           ),
         ],
       ),
     );
-  }
 }
 
 class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-
   const _StatCard({
     required this.title,
     required this.value,
@@ -276,11 +268,15 @@ class _StatCard extends StatelessWidget {
     required this.color,
   });
 
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) => Card(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -310,38 +306,31 @@ class _StatCard extends StatelessWidget {
         ),
       ),
     );
-  }
 }
 
 class _AnimalsTab extends StatelessWidget {
   const _AnimalsTab();
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
+  Widget build(BuildContext context) => const Center(
       child: Text('Animals Tab - Coming Soon'),
     );
-  }
 }
 
 class _DonationsTab extends StatelessWidget {
   const _DonationsTab();
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
+  Widget build(BuildContext context) => const Center(
       child: Text('Donations Tab - Coming Soon'),
     );
-  }
 }
 
 class _ProfileTab extends StatelessWidget {
   const _ProfileTab();
 
   @override
-  Widget build(BuildContext context) {
-    return const Center(
+  Widget build(BuildContext context) => const Center(
       child: Text('Profile Tab - Coming Soon'),
     );
-  }
 }

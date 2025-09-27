@@ -31,27 +31,27 @@ class Donation {
     this.shelterName,
   });
 
-  factory Donation.fromJson(Map<String, dynamic> json) {
-    return Donation(
+  factory Donation.fromJson(Map<String, dynamic> json) => Donation(
       id: json['id'] as String,
       userId: json['user_id'] as String,
       shelterId: json['shelter_id'] as String,
       amount: (json['amount'] as num).toDouble(),
-      message: json['message'] as String?,
       isAnonymous: json['is_anonymous'] as bool? ?? false,
       status: json['status'] as String,
       paymentMethod: json['payment_method'] as String,
-      paymentIntentId: json['payment_intent_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
-      userName: (json['users'] as Map<String, dynamic>?)?['full_name'] as String?,
-      userEmail: (json['users'] as Map<String, dynamic>?)?['email'] as String?,
-      shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] as String?,
+      message: json['message'] as String?,
+      paymentIntentId: json['payment_intent_id'] as String?,
+      userName: (json['users'] as Map<String, dynamic>?)?['full_name'] 
+          as String?,
+      userEmail: (json['users'] as Map<String, dynamic>?)?['email'] 
+          as String?,
+      shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] 
+          as String?,
     );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
+  Map<String, dynamic> toJson() => {
       'id': id,
       'user_id': userId,
       'shelter_id': shelterId,
@@ -64,7 +64,6 @@ class Donation {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
-  }
 
   Donation copyWith({
     String? id,
@@ -105,26 +104,19 @@ class Donation {
   bool get isFailed => status == 'failed';
   bool get isCancelled => status == 'cancelled';
 
-  String get displayName {
-    if (isAnonymous) return 'Anonymous';
-    return userName ?? 'Unknown User';
-  }
+  String get displayName =>
+      isAnonymous ? 'Anonymous' : userName ?? 'Unknown User';
 
-  String get formattedAmount {
-    return '\$${amount.toStringAsFixed(2)}';
-  }
+  String get formattedAmount => '\$${amount.toStringAsFixed(2)}';
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Donation && other.id == id;
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) || (other is Donation && other.id == id);
 
   @override
   int get hashCode => id.hashCode;
 
   @override
-  String toString() {
-    return 'Donation(id: $id, amount: $amount, status: $status, shelter: $shelterName)';
-  }
+  String toString() =>
+      'Donation(id: $id, amount: $amount, status: $status, shelter: $shelterName)';
 }

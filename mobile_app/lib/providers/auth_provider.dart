@@ -33,7 +33,7 @@ class AuthProvider with ChangeNotifier {
     } on AuthException catch (e) {
       debugPrint('Sign in error: $e');
       return false;
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Unexpected error: $e');
       return false;
     } finally {
@@ -58,7 +58,7 @@ class AuthProvider with ChangeNotifier {
     } on AuthException catch (e) {
       debugPrint('Sign up error: $e');
       return false;
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Unexpected error: $e');
       return false;
     } finally {
@@ -74,7 +74,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     } on AuthException catch (e) {
       debugPrint('Sign out error: $e');
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Unexpected error: $e');
     }
   }

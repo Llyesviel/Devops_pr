@@ -16,47 +16,35 @@ dependencies:
   # UI Components
   cached_network_image: ^3.3.0
   cupertino_icons: ^1.0.6
+  material_design_icons_flutter: ^7.0.7296
   
   # HTTP Requests
   dio: ^5.3.2
-  
-  # Push Notifications
-  firebase_core: ^2.24.2
-  firebase_messaging: ^14.7.6
-  
-  # Local Storage
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  
-  # HTTP Requests
   http: ^1.1.0
+  
+  # Push Notifications (temporarily disabled for web compatibility)
+  # firebase_core: ^2.24.2
+  # firebase_messaging: ^14.7.6
   
   # Image Handling
   image_picker: ^1.0.4
   
+  # Local Storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.2
+  
   # Utils
   intl: ^0.19.0
-  
-  # UI Components
-  material_design_icons_flutter: ^7.0.7296
-  
-  # Utils
   permission_handler: ^11.1.0
-  
-  # State Management
   provider: ^6.1.1
-  
-  # Local Storage
-  shared_preferences: ^2.2.2
+  url_launcher: ^6.2.1
   
   # Payments
   stripe_payment: ^1.1.4
   
   # Supabase
   supabase_flutter: ^2.0.0
-  
-  # Utils
-  url_launcher: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -72,10 +60,3 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Bold.ttf
-          weight: 700

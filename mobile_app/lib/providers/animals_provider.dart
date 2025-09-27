@@ -47,13 +47,13 @@ class AnimalsProvider with ChangeNotifier {
 
       final response = await query.order('created_at', ascending: false);
       
-      _animals = (response as List)
+      _animals = (response as List<dynamic>)
           .map((json) => Animal.fromJson(json as Map<String, dynamic>))
           .toList();
     } on PostgrestException catch (e) {
       _error = e.message;
       debugPrint('Error fetching animals: ${e.message}');
-    } catch (e) {
+    } on Exception catch (e) {
       _error = e.toString();
       debugPrint('Unexpected error: $e');
     } finally {
@@ -103,7 +103,7 @@ class AnimalsProvider with ChangeNotifier {
     } on PostgrestException catch (e) {
       debugPrint('Error toggling favorite: ${e.message}');
       return false;
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Unexpected error: $e');
       return false;
     }
