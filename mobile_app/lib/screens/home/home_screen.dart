@@ -198,7 +198,8 @@ class _HomeTab extends StatelessWidget {
                   Expanded(
                     child: _StatCard(
                       title: 'Total Donated',
-                      value: '\$${donationsProvider.totalDonated.toStringAsFixed(0)}',
+                      value: '\$${donationsProvider.totalDonated
+                          .toStringAsFixed(0)}',
                       icon: Icons.attach_money,
                       color: Colors.green,
                     ),

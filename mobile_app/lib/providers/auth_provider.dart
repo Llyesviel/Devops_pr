@@ -6,10 +6,6 @@ class AuthProvider with ChangeNotifier {
   User? _user;
   bool _isLoading = false;
 
-  User? get user => _user;
-  bool get isLoading => _isLoading;
-  bool get isAuthenticated => _user != null;
-
   AuthProvider() {
     _user = _supabase.auth.currentUser;
     _supabase.auth.onAuthStateChange.listen((data) {
@@ -17,6 +13,10 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     });
   }
+
+  User? get user => _user;
+  bool get isLoading => _isLoading;
+  bool get isAuthenticated => _user != null;
 
   Future<bool> signIn(String email, String password) async {
     try {

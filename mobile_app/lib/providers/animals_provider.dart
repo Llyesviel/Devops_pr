@@ -47,7 +47,7 @@ class AnimalsProvider with ChangeNotifier {
 
       final response = await query.order('created_at', ascending: false);
       
-      _animals = (response as List<dynamic>)
+      _animals = response
           .map((json) => Animal.fromJson(json as Map<String, dynamic>))
           .toList();
     } on PostgrestException catch (e) {
@@ -90,15 +90,8 @@ class AnimalsProvider with ChangeNotifier {
         });
       }
 
-      // Update local state
-      final animalIndex = _animals.indexWhere((a) => a.id == animalId);
-      if (animalIndex != -1) {
-        _animals[animalIndex] = _animals[animalIndex].copyWith(
-          isFavorite: existing == null,
-        );
-        notifyListeners();
-      }
-
+      // Refresh animals list
+      await fetchAnimals();
       return true;
     } on PostgrestException catch (e) {
       debugPrint('Error toggling favorite: ${e.message}');

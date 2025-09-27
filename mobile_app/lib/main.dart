@@ -23,8 +23,7 @@ class AnimalCharityApp extends StatelessWidget {
   const AnimalCharityApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
+  Widget build(BuildContext context) => MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AnimalsProvider()),
@@ -40,5 +39,4 @@ class AnimalCharityApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
       ),
     );
-  }
 }

@@ -39,15 +39,18 @@ class DonationsProvider with ChangeNotifier {
 
       final response = await query.order('created_at', ascending: false);
       
-      _donations = (response as List<dynamic>)
+      _donations = response
           .map((json) => Donation.fromJson(json as Map<String, dynamic>))
           .toList();
 
       // Calculate total donated
       _totalDonated = _donations
           .where((d) => d.status == 'completed')
-          .fold(0, (sum, donation) => sum + donation.amount);
+          .fold(0.0, (sum, donation) => sum + donation.amount);
 
+    } on PostgrestException catch (e) {
+      _error = e.message;
+      debugPrint('Error fetching donations: ${e.message}');
     } on Exception catch (e) {
       _error = e.toString();
       debugPrint('Error fetching donations: $e');

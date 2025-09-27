@@ -31,6 +31,37 @@ class Donation {
     this.shelterName,
   });
 
+  Donation.copyWith({
+    String? id,
+    String? userId,
+    String? shelterId,
+    double? amount,
+    String? message,
+    bool? isAnonymous,
+    String? status,
+    String? paymentMethod,
+    String? paymentIntentId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? userName,
+    String? userEmail,
+    String? shelterName,
+    required Donation original,
+  }) : id = id ?? original.id,
+       userId = userId ?? original.userId,
+       shelterId = shelterId ?? original.shelterId,
+       amount = amount ?? original.amount,
+       message = message ?? original.message,
+       isAnonymous = isAnonymous ?? original.isAnonymous,
+       status = status ?? original.status,
+       paymentMethod = paymentMethod ?? original.paymentMethod,
+       paymentIntentId = paymentIntentId ?? original.paymentIntentId,
+       createdAt = createdAt ?? original.createdAt,
+       updatedAt = updatedAt ?? original.updatedAt,
+       userName = userName ?? original.userName,
+       userEmail = userEmail ?? original.userEmail,
+       shelterName = shelterName ?? original.shelterName;
+
   factory Donation.fromJson(Map<String, dynamic> json) => Donation(
       id: json['id'] as String,
       userId: json['user_id'] as String,
@@ -80,8 +111,7 @@ class Donation {
     String? userName,
     String? userEmail,
     String? shelterName,
-  }) {
-    return Donation(
+  }) => Donation(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       shelterId: shelterId ?? this.shelterId,
@@ -97,7 +127,6 @@ class Donation {
       userEmail: userEmail ?? this.userEmail,
       shelterName: shelterName ?? this.shelterName,
     );
-  }
 
   bool get isPending => status == 'pending';
   bool get isCompleted => status == 'completed';
@@ -117,6 +146,6 @@ class Donation {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() =>
-      'Donation(id: $id, amount: $amount, status: $status, shelter: $shelterName)';
+  String toString() => 'Donation(id: $id, amount: $amount, '
+      'status: $status, shelter: $shelterName)';
 }
