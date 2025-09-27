@@ -63,8 +63,7 @@ class Donation {
     String? userName,
     String? userEmail,
     String? shelterName,
-  }) {
-    return Donation(
+  }) => Donation(
       id: id ?? this.id,
       userId: userId ?? this.userId,
       shelterId: shelterId ?? this.shelterId,
@@ -80,7 +79,6 @@ class Donation {
       userEmail: userEmail ?? this.userEmail,
       shelterName: shelterName ?? this.shelterName,
     );
-  }
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -101,7 +99,9 @@ class Donation {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
     return other is Donation &&
         other.id == id &&
         other.userId == userId &&
@@ -120,8 +120,7 @@ class Donation {
   }
 
   @override
-  int get hashCode {
-    return Object.hash(
+  int get hashCode => Object.hash(
       id,
       userId,
       shelterId,
@@ -137,5 +136,4 @@ class Donation {
       userEmail,
       shelterName,
     );
-  }
 }

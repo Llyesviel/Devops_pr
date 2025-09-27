@@ -1,38 +1,24 @@
-name: animal_charity_app
-description: Mobile application for animal charity with Flutter/Dart
-
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+name: mobile_app
+description: "A new Flutter project."
+publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.4.4 <4.0.0'
   flutter: ">=3.10.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # UI Components
   cached_network_image: ^3.3.0
   cupertino_icons: ^1.0.6
-  
-  # HTTP Requests
   dio: ^5.3.2
-  http: ^1.1.0
-  
-  # Push Notifications (temporarily disabled for web compatibility)
-  # firebase_core: ^2.24.2
-  # firebase_messaging: ^14.7.6
-  
-  # Local Storage
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  
-  # Image Handling
+  http: ^1.1.0
   image_picker: ^1.0.4
-  
-  # Utils
   intl: ^0.19.0
   material_design_icons_flutter: ^7.0.7296
   permission_handler: ^11.1.0
@@ -55,3 +41,15 @@ flutter:
   # assets:
   #   - assets/images/
   #   - assets/icons/
+
+  fonts:
+    - family: Schyler
+      fonts:
+        - asset: assets/fonts/Schyler-Regular.ttf
+        - asset: assets/fonts/Schyler-Italic.ttf
+          style: italic
+    - family: Trajan Pro
+      fonts:
+        - asset: assets/fonts/TrajanPro.ttf
+        - asset: assets/fonts/TrajanPro_Bold.ttf
+          weight: 700
