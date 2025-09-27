@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:animal_charity_app/main.dart';
 
 void main() {
-  testWidgets('App smoke test', (WidgetTester tester) async {
+  testWidgets('App smoke test', (tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const AnimalCharityApp());
 
     // Verify that the app starts without crashing
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 
-  testWidgets('Login screen test', (WidgetTester tester) async {
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Login screen test', (tester) async {
+    await tester.pumpWidget(const AnimalCharityApp());
 
     // Wait for the splash screen to finish
     await tester.pumpAndSettle();

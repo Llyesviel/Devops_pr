@@ -1,0 +1,130 @@
+class Donation {
+  final String id;
+  final String userId;
+  final String shelterId;
+  final double amount;
+  final String? message;
+  final bool isAnonymous;
+  final String status; // pending, completed, failed, cancelled
+  final String paymentMethod;
+  final String? paymentIntentId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String? userName;
+  final String? userEmail;
+  final String? shelterName;
+
+  const Donation({
+    required this.id,
+    required this.userId,
+    required this.shelterId,
+    required this.amount,
+    required this.isAnonymous,
+    required this.status,
+    required this.paymentMethod,
+    required this.createdAt,
+    required this.updatedAt,
+    this.message,
+    this.paymentIntentId,
+    this.userName,
+    this.userEmail,
+    this.shelterName,
+  });
+
+  factory Donation.fromJson(Map<String, dynamic> json) {
+    return Donation(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      shelterId: json['shelter_id'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      message: json['message'] as String?,
+      isAnonymous: json['is_anonymous'] as bool? ?? false,
+      status: json['status'] as String,
+      paymentMethod: json['payment_method'] as String,
+      paymentIntentId: json['payment_intent_id'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+      userName: (json['users'] as Map<String, dynamic>?)?['full_name'] as String?,
+      userEmail: (json['users'] as Map<String, dynamic>?)?['email'] as String?,
+      shelterName: (json['shelters'] as Map<String, dynamic>?)?['name'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'user_id': userId,
+      'shelter_id': shelterId,
+      'amount': amount,
+      'message': message,
+      'is_anonymous': isAnonymous,
+      'status': status,
+      'payment_method': paymentMethod,
+      'payment_intent_id': paymentIntentId,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+    };
+  }
+
+  Donation copyWith({
+    String? id,
+    String? userId,
+    String? shelterId,
+    double? amount,
+    String? message,
+    bool? isAnonymous,
+    String? status,
+    String? paymentMethod,
+    String? paymentIntentId,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? userName,
+    String? userEmail,
+    String? shelterName,
+  }) {
+    return Donation(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      shelterId: shelterId ?? this.shelterId,
+      amount: amount ?? this.amount,
+      message: message ?? this.message,
+      isAnonymous: isAnonymous ?? this.isAnonymous,
+      status: status ?? this.status,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      paymentIntentId: paymentIntentId ?? this.paymentIntentId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      userName: userName ?? this.userName,
+      userEmail: userEmail ?? this.userEmail,
+      shelterName: shelterName ?? this.shelterName,
+    );
+  }
+
+  bool get isPending => status == 'pending';
+  bool get isCompleted => status == 'completed';
+  bool get isFailed => status == 'failed';
+  bool get isCancelled => status == 'cancelled';
+
+  String get displayName {
+    if (isAnonymous) return 'Anonymous';
+    return userName ?? 'Unknown User';
+  }
+
+  String get formattedAmount {
+    return '\$${amount.toStringAsFixed(2)}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Donation && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'Donation(id: $id, amount: $amount, status: $status, shelter: $shelterName)';
+  }
+}
