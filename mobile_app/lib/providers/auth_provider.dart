@@ -2,10 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthProvider with ChangeNotifier {
-  final SupabaseClient _supabase = Supabase.instance.client;
-  User? _user;
-  bool _isLoading = false;
-
   AuthProvider() {
     _user = _supabase.auth.currentUser;
     _supabase.auth.onAuthStateChange.listen((data) {
@@ -13,6 +9,10 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     });
   }
+
+  final SupabaseClient _supabase = Supabase.instance.client;
+  User? _user;
+  bool _isLoading = false;
 
   User? get user => _user;
   bool get isLoading => _isLoading;

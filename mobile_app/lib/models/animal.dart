@@ -1,25 +1,4 @@
 class Animal {
-  final String id;
-  final String name;
-  final String species;
-  final String breed;
-  final int age;
-  final String gender;
-  final String description;
-  final List<String> imageUrls;
-  final String shelterId;
-  final String shelterName;
-  final String shelterAddress;
-  final bool isAdopted;
-  final bool isFavorite;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String? medicalHistory;
-  final String? temperament;
-  final bool isVaccinated;
-  final bool isNeutered;
-  final double? weight;
-
   const Animal({
     required this.id,
     required this.name,
@@ -67,6 +46,27 @@ class Animal {
       temperament: json['temperament'] as String?,
       weight: (json['weight'] as num?)?.toDouble(),
     );
+
+  final String id;
+  final String name;
+  final String species;
+  final String breed;
+  final int age;
+  final String gender;
+  final String description;
+  final List<String> imageUrls;
+  final String shelterId;
+  final String shelterName;
+  final String shelterAddress;
+  final bool isAdopted;
+  final bool isFavorite;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String? medicalHistory;
+  final String? temperament;
+  final bool isVaccinated;
+  final bool isNeutered;
+  final double? weight;
 
   Animal copyWith({
     String? id,
