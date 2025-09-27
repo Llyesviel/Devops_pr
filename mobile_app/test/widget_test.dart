@@ -28,10 +28,10 @@ void main() {
   testWidgets('Login screen test', (tester) async {
     // Simple test for login screen elements
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: Scaffold(
           body: Column(
-            children: const [
+            children: [
               Text('Welcome Back'),
               ElevatedButton(
                 onPressed: null,
