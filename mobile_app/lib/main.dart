@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'providers/animals_provider.dart';
 import 'providers/auth_provider.dart';
-import 'providers/donations_provider.dart';
+import 'providers/notifications_provider.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Supabase.initialize(
-    url: 'YOUR_SUPABASE_URL',
-    anonKey: 'YOUR_SUPABASE_ANON_KEY',
-  );
   
   runApp(const AnimalCharityApp());
 }
@@ -27,7 +20,7 @@ class AnimalCharityApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => AnimalsProvider()),
-        ChangeNotifierProvider(create: (_) => DonationsProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationsProvider()),
       ],
       child: MaterialApp(
         title: 'Animal Charity',

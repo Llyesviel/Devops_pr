@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import 'auth/login_screen.dart';
-import 'home/home_screen.dart';
+import 'animals_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -58,17 +55,10 @@ class _SplashScreenState extends State<SplashScreen>
       return;
     }
 
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    
-    if (authProvider.isAuthenticated) {
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(builder: (context) => const HomeScreen()),
-      );
-    } else {
-      await Navigator.of(context).pushReplacement(
-        MaterialPageRoute<void>(builder: (context) => const LoginScreen()),
-      );
-    }
+    // Переходим сразу на экран животных (убираем аутентификацию для демо)
+    await Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (context) => const AnimalsScreen()),
+    );
   }
 
   @override

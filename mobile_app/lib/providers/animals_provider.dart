@@ -1,20 +1,21 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/animal.dart';
+import '../services/microservices_client.dart';
 
 class AnimalsProvider with ChangeNotifier {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final MicroservicesClient _client = MicroservicesClient();
   List<Animal> _animals = [];
+  List<Animal> _filteredAnimals = [];
   bool _isLoading = false;
   String? _error;
 
-  List<Animal> get animals => _animals;
+  List<Animal> get animals => 
+      _filteredAnimals.isEmpty ? _animals : _filteredAnimals;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
   Future<void> fetchAnimals({
     String? species,
-    String? shelterId,
     bool? isAdopted,
     String? search,
   }) async {
@@ -23,85 +24,150 @@ class AnimalsProvider with ChangeNotifier {
       _error = null;
       notifyListeners();
 
-      var query = _supabase.from('animals').select('''
-        *,
-        shelters (
-          id,
-          name,
-          address
-        )
-      ''');
+      debugPrint('Fetching animals with params: species=$species, isAdopted=$isAdopted, search=$search');
 
-      if (species != null && species.isNotEmpty) {
-        query = query.eq('species', species);
-      }
-      if (shelterId != null && shelterId.isNotEmpty) {
-        query = query.eq('shelter_id', shelterId);
-      }
-      if (isAdopted != null) {
-        query = query.eq('is_adopted', isAdopted);
-      }
-      if (search != null && search.isNotEmpty) {
-        query = query.or('name.ilike.%$search%,description.ilike.%$search%');
-      }
-
-      final response = await query.order('created_at', ascending: false);
+      // Получаем данные из микросервиса
+      final animalsData = await _client.getAnimals(
+        species: species,
+        status: isAdopted == true 
+            ? 'adopted' 
+            : (isAdopted == false ? 'available' : null),
+      );
       
-      _animals = response
-          .map(Animal.fromJson)
-          .toList();
-    } on PostgrestException catch (e) {
-      _error = e.message;
-      debugPrint('Error fetching animals: ${e.message}');
+      debugPrint('Received ${animalsData.length} animals from API');
+      
+      // Преобразуем данные в модели Animal
+      _animals = animalsData.map(_convertToAnimal).toList();
+      
+      debugPrint('Converted to ${_animals.length} Animal objects');
+      
+      // Применяем поисковый фильтр локально
+      _applySearchFilter(search);
+      
+      debugPrint('Final animals count: ${_animals.length}, filtered: ${_filteredAnimals.length}');
+      
     } on Exception catch (e) {
-      _error = e.toString();
-      debugPrint('Unexpected error: $e');
+      _error = 'Ошибка загрузки животных: ${e.toString()}';
+      _animals = [];
+      _filteredAnimals = [];
+      debugPrint('Error fetching animals: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<bool> toggleFavorite(String animalId) async {
+  void _applySearchFilter(String? search) {
+    if (search?.isEmpty ?? true) {
+      _filteredAnimals = _animals; // Показываем все животные если поиск пустой
+      return;
+    }
+    
+    final searchLower = search!.toLowerCase();
+    _filteredAnimals = _animals.where((animal) => 
+      animal.name.toLowerCase().contains(searchLower) ||
+      animal.description.toLowerCase().contains(searchLower) ||
+      animal.species.toLowerCase().contains(searchLower) ||
+      (animal.breed?.toLowerCase().contains(searchLower) ?? false)
+    ).toList();
+  }
+
+  // Конвертируем данные из микросервиса в модель Animal
+  Animal _convertToAnimal(Map<String, dynamic> data) {
+    debugPrint('Converting animal data: $data');
+    return Animal(
+      id: data['id']?.toString() ?? '',
+      name: data['name']?.toString() ?? '',
+      species: data['type']?.toString() ?? data['species']?.toString() ?? '', // Сервер использует 'type'
+      breed: data['breed']?.toString() ?? '',
+      age: (data['age'] as num?)?.toInt() ?? 0,
+      gender: data['gender']?.toString() ?? 'Неизвестно',
+      description: data['description']?.toString() ?? '',
+      imageUrls: [], // Пока нет изображений в микросервисе
+      shelterId: data['shelter']?.toString() ?? '',
+      shelterName: data['shelter']?.toString() ?? '',
+      shelterAddress: '',
+      isAdopted: data['isAdopted'] == true, // Сервер использует 'isAdopted'
+      isFavorite: false, // Пока не реализовано в микросервисе
+      createdAt: DateTime.tryParse(data['createdAt']?.toString() ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(data['updatedAt']?.toString() ?? '') ?? DateTime.now(),
+      isVaccinated: data['medicalInfo']?['vaccinated'] == true,
+      isNeutered: data['medicalInfo']?['sterilized'] == true,
+      medicalHistory: data['medicalInfo']?['healthStatus']?.toString(),
+      temperament: null,
+      weight: null,
+    );
+  }
+
+  // Добавить новое животное
+  Future<bool> addAnimal({
+    required String name,
+    required String species,
+    required int age,
+    required String description,
+    String? breed,
+    String? color,
+    String? gender,
+    String? status,
+  }) async {
     try {
-      final user = _supabase.auth.currentUser;
-      if (user == null) {
-        return false;
-      }
+      _isLoading = true;
+      notifyListeners();
 
-      // Check if already favorited
-      final existing = await _supabase
-          .from('user_favorites')
-          .select()
-          .eq('user_id', user.id)
-          .eq('animal_id', animalId)
-          .maybeSingle();
+      await _client.addAnimal(
+        name: name,
+        species: species,
+        age: age,
+        description: description,
+        breed: breed,
+        color: color,
+        gender: gender,
+        status: status,
+      );
 
-      if (existing != null) {
-        // Remove from favorites
-        await _supabase
-            .from('user_favorites')
-            .delete()
-            .eq('user_id', user.id)
-            .eq('animal_id', animalId);
-      } else {
-        // Add to favorites
-        await _supabase.from('user_favorites').insert({
-          'user_id': user.id,
-          'animal_id': animalId,
-        });
-      }
-
-      // Refresh animals list
+      // Обновляем список животных
       await fetchAnimals();
       return true;
-    } on PostgrestException catch (e) {
-      debugPrint('Error toggling favorite: ${e.message}');
-      return false;
     } on Exception catch (e) {
-      debugPrint('Unexpected error: $e');
+      _error = e.toString();
+      debugPrint('Error adding animal: $e');
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Усыновить животное
+  Future<bool> adoptAnimal({
+    required String animalId,
+    required String adopterName,
+    required String adopterEmail,
+    required String adopterPhone,
+  }) async {
+    try {
+      await _client.adoptAnimal(
+        animalId: animalId,
+        adopterName: adopterName,
+        adopterEmail: adopterEmail,
+        adopterPhone: adopterPhone,
+      );
+
+      // Обновляем список животных
+      await fetchAnimals();
+      return true;
+    } on Exception catch (e) {
+      _error = e.toString();
+      debugPrint('Error adopting animal: $e');
       return false;
     }
+  }
+
+  Future<bool> toggleFavorite(String animalId) async {
+    // Пока не реализовано в микросервисах
+    // Можно добавить локальное хранение избранного
+    debugPrint('Favorite functionality not implemented with microservices yet');
+    return false;
   }
 
   void clearError() {
